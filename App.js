@@ -1,22 +1,22 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/HomeScreen";
+
+const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>EchoHub Mobile App</Text>
-      <Text></Text>
-      <Text>Created by:</Text>
-      <Text>Taha Hashmat</Text>
-      <Text>Mitchell Hicks</Text>
-      <Text>Austin Page</Text>
-      <Text>Cassidy Linhares</Text>
-      <Text>Tolu Elebute</Text>
-
-
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen options={{headerShown:false}} name="Login" component={LoginScreen} /> 
+        <Stack.Screen name="Home" component={HomeScreen} /> 
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
