@@ -1,15 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {StyleSheet, Text, View, Image, TouchableOpacity} from "react-native";
-import Household from "./Household";
-import Settings from "./Settings"; 
-import Suggestions from "./Suggestions";
-import Transportation from "./Transportation";  
+
+import HomeScreen from "../screens/HomeScreen"
 
 const Tab = createBottomTabNavigator();
 
-const HomeScreen = () => {
-    return (
+const Tabs = () => {
+    return(
         <Tab.Navigator
             tabBarOptions={{
                 showLabel: false,
@@ -28,7 +26,7 @@ const HomeScreen = () => {
 
             <Tab.Screen 
                 name="HomeTab" 
-                component={Household}
+                component={HomeScreen}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style = {{alignItems: 'center', justifyContent: 'center', top: 10}}>
@@ -50,7 +48,7 @@ const HomeScreen = () => {
             />
             <Tab.Screen 
                 name="Connected Devices"
-                component={Transportation}
+                component={HomeScreen}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style = {{alignItems: 'center', justifyContent: 'center', top: 10}}>
@@ -73,7 +71,7 @@ const HomeScreen = () => {
 
             <Tab.Screen 
                 name="Suggestions" 
-                component={Suggestions}
+                component={HomeScreen}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style = {{alignItems: 'center', justifyContent: 'center', top: 10}}>
@@ -95,7 +93,7 @@ const HomeScreen = () => {
             />
             <Tab.Screen 
                 name="Settings" 
-                component={Settings}
+                component={HomeScreen}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style = {{alignItems: 'center', justifyContent: 'center', top: 10}}>
@@ -117,7 +115,7 @@ const HomeScreen = () => {
             />
 
         </Tab.Navigator>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -133,4 +131,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen
+export default Tabs;
