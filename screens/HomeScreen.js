@@ -5,6 +5,8 @@ import Household from "./Household";
 import Settings from "./Settings"; 
 import Suggestions from "./Suggestions";
 import Transportation from "./Transportation";  
+import Home from "./Home";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -27,8 +29,8 @@ const HomeScreen = () => {
             }}>
 
             <Tab.Screen 
-                name="HomeTab" 
-                component={Household}
+                name="Home" 
+                component={Home}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style = {{alignItems: 'center', justifyContent: 'center', top: 10}}>
@@ -44,8 +46,9 @@ const HomeScreen = () => {
                             <Text
                                 style={{color: focused ? '#e32f45' : '#748c94', fontSize: 10}}> HOME 
                             </Text>
-                        </View>   
+                        </View>  
                     ),
+                    headerShown:false
                 }}
             />
             <Tab.Screen 
@@ -117,6 +120,7 @@ const HomeScreen = () => {
             />
 
         </Tab.Navigator>
+
     )
 }
 

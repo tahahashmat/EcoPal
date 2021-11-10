@@ -47,8 +47,20 @@ const LoginScreen = () => {
         >
         
     
+        <ImageBackground
+            source={require('../assets/banner.jpg')}                    
+            resizeMode=""
+            style={{
+                width: "100%",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+            }}
+        >
+            
 
         <View style={styles.inputContainer}>
+           
             <TextInput
                 placeholder="Email"
                 value={email}
@@ -81,6 +93,8 @@ const LoginScreen = () => {
                     <Text style={styles.buttonOutlineText}>Register</Text>    
                 </TouchableOpacity>
             </View>
+            </ImageBackground>
+
         </KeyboardAvoidingView>
     )
 }
@@ -89,14 +103,13 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-
     },
 
     inputContainer: { 
-        width: '80%'},
+        width: '80%',
+        marginTop: "75%" },
 
     input: {
         backgroundColor: 'white',
