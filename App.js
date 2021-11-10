@@ -11,7 +11,6 @@ import Tabs from "./navigation/Tabs";
 
 const Stack = createNativeStackNavigator();
 
-
 export default function App() {
   return (
       <NavigationContainer>
