@@ -3,7 +3,6 @@ import {View} from 'react-native';
 import { db } from '../firebase'
 
 
-
 const Transportation = ({ navigation} ) => {
     useEffect(() => {
       var docRef = db.collection("users").doc("hello");
