@@ -5,8 +5,9 @@ import { Overlay } from "react-native-elements";
 import DropDownPicker from "react-native-dropdown-picker";
 import { StateContext } from "./StateProvider";
 
-const Breakfast = () => {
-  const { breakfastListItems, setBreakfastListItems } = useContext(StateContext);
+
+const Lunch = () => {
+  const { lunchListItems, setLunchListItems } = useContext(StateContext);
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -49,7 +50,7 @@ const Breakfast = () => {
         type: value,
         servings: serving,
       };
-      setBreakfastListItems([...breakfastListItems, item]);
+      setLunchListItems([...lunchListItems, item]);
       setServing(0);
       setValue(null);
       toggleOverlay();
@@ -65,7 +66,7 @@ const Breakfast = () => {
       <Text style={{ fontSize: 36, fontWeight: "bold", marginBottom: 20 }}>
         Food Items
       </Text>
-      {breakfastListItems.map((item) => (
+      {lunchListItems.map((item) => (
         <Text style={{ fontSize: 20 }}>
           {item.type},{item.servings}
         </Text>
@@ -136,7 +137,7 @@ const Breakfast = () => {
   );
 };
 
-export default Breakfast;
+export default Lunch;
 
 const styles = StyleSheet.create({
   button: {

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core'
 import React, { useEffect, useState } from 'react'
 import { ImageBackground, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import { auth } from '../firebase'
+import { db, auth } from '../firebase'
 
 
 const LoginScreen = () => {
@@ -14,6 +14,7 @@ const LoginScreen = () => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if(user){
                 navigation.navigate("Home")
+                var docRef = db.collection('users').doc(user.uid);
             }
         })
         return unsubscribe

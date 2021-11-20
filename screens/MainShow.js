@@ -92,7 +92,7 @@ const MainShow = ({ navigation }) => {
         />
         <TouchableOpacity
           style={{
-            width: 350,+
+            width: 350,
             paddingVertical: SIZES.padding,
             paddingHorizontal: SIZES.padding,
             marginLeft: 30,

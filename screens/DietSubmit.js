@@ -38,7 +38,8 @@ const DietSubmit = ({ navigation }) => {
           </Text>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container}
+      onPress={() => navigation.navigate("Lunch")}>
         <ImageBackground
           source={require("../assets/lunch.jpg")}
           resizeMode="cover"
@@ -63,7 +64,8 @@ const DietSubmit = ({ navigation }) => {
           </Text>
         </ImageBackground>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.container}>
+      <TouchableOpacity style={styles.container}
+      onPress={() => navigation.navigate("Dinner")}>
         <ImageBackground
           source={require("../assets/dinner.jpg")}
           resizeMode="cover"
