@@ -6,6 +6,7 @@ import Breakfast from "./Breakfast";
 import Lunch from "./Lunch";
 import Dinner from "./Dinner";
 
+
 const Stack = createNativeStackNavigator();
 
 const Diet = ({ navigation }) => {

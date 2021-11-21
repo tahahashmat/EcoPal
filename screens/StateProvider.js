@@ -1,32 +1,32 @@
 import React, { useState, createContext, useEffect } from "react";
 
 const carbonAmount = {
-  "Beef": 2984,
+  "Beef (Cows Meat)": 2984,
   "Chocolate": 933,
   "Lamb": 1192,
   "Coffee": 1427,
-  "Shellfish": 806,
-  "Cheese": 716,
-  "Fish": 409,
-  "Pork": 369,
-  "Chicken": 296,
+  "Shellfish (Shrimp, Scallops, Lobster)": 806,
+  "Cheese and Yogurt": 716,
+  "Fish and Other Seafood": 409,
+  "Bacon (Pork meat)": 369,
+  "Chicken and Turkey": 296,
   "Eggs": 140,
-  "Rice": 178,
-  "Nuts": 162,
-  "Tofu": 16,
+  "Rice and Quinoa": 178,
+  "Nuts and Seeds": 162,
+  "Tofu and Soy Based Food": 16,
   "Milk": 269,
-  "Oatmeal": 788,
-  "otherVegetables": 99,
+  "Oatmeal and Cereal": 788,
+  "Other Vegetables": 99,
   "Beer": 178,
-  "Wine": 9,
-  "Bread": 358,
-  "Berries": 68,
-  "otherFruit": 63,
-  "Peas": 122,
-  "rootVegetables": 47,
+  "Wine and Spirits": 9,
+  "Bread, Pasta, Crackers": 358,
+  "Berries & Grapes": 68,
+  "Other Fruits": 63,
+  "Peas and Legumes": 122,
+  "Root Vegtables": 47,
   "Juice": 105,
-  "Pastries": 34,
-  "Potato": 245,
+  "Pastries and Baked Goods": 34,
+  "Potatoes and Starches": 245,
 };
 
 const transportAmount = {
@@ -47,6 +47,7 @@ const transportAmount = {
 export const StateContext = createContext();
 
 export const StateProvider = (props) => {
+  const [userID, setUserID] = useState("");
   const [breakfastListItems, setBreakfastListItems] = useState([]);
   const [lunchListItems, setLunchListItems] = useState([]);
   const [dinnerListItems, setDinnerListItems] = useState([]);
@@ -54,12 +55,14 @@ export const StateProvider = (props) => {
 
   // Value's that goes through to all components
   const value = {
+    userID,
     carbonAmount,
     transportAmount,
     breakfastListItems,
     lunchListItems,
     dinnerListItems,
     transportationListItems,
+    setUserID,
     setBreakfastListItems,
     setLunchListItems,
     setDinnerListItems,

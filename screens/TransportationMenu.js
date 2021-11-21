@@ -1,12 +1,56 @@
-import React, { useState, useContext } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, TextInput} from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+
+import { View, ScrollView, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
 import { Overlay } from "react-native-elements";
 import DropDownPicker from "react-native-dropdown-picker";
 import { StateContext } from "./StateProvider";
+import {db, firebase} from "../firebase"
 
+// Helper function to get the current date
+const getCurrentDate = () => {
+
+  var date = new Date().getDate();
+  var month = new Date().getMonth() + 1;
+  var year = new Date().getFullYear();
+
+  //Alert.alert(date + '-' + month + '-' + year);
+  // You can turn it in to your desired format
+  return date + '-' + month + '-' + year;//format: dd-mm-yyyy;
+}
+
+// Helper function to remove Item
+const removeItem = (arr, val) => {
+  let len = arr.length;
+  let index;
+  for(let i = 0; i < len; i++){
+    if(arr[i].value == val){
+      console.log(arr[i].label);
+      index = i;
+    }
+  }
+  arr.splice(index, 1);
+  return  arr
+}
+
+const remove = (arr,val) => {
+  // Remove from the transportationList
+  let array = [...arr]
+  let len = array.length;
+  let index;
+  for(let i = 0; i < len; i++){
+    if(array[i].type == val){
+      index = i;
+    }
+  }
+  array.splice(index, 1);
+  return array
+  
+  // Add back to the array
+
+}
 
 const TransportationMenu = () => {
-  const { transportationListItems, setTransportationListItems } = useContext(StateContext);
+  const { transportationListItems, setTransportationListItems, userID } = useContext(StateContext);
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -32,6 +76,9 @@ const TransportationMenu = () => {
     }
   }
 
+  // Adding it to the database
+  let currDate = getCurrentDate();
+  let docRef = db.collection('userTransportation').doc(userID).collection('data').doc(currDate);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -43,10 +90,25 @@ const TransportationMenu = () => {
         type: value,
         distance: distance,
       };
+      
+      let docData = {};
+      docData[value] = distance;
+      
+      docRef.update(docData).then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+          docRef.set(docData);
+          //console.error("Error writing document: ", error);
+      });
+
+      const itemRef = removeItem(items, value);
       setTransportationListItems([...transportationListItems, item]);
       setDistance('');
       setValue(null);
+      setItems(itemRef);
       toggleOverlay();
+
     } else if (value == null) {
       alert("Please select a transportation method");
     } else if (distance == 0) {
@@ -54,15 +116,68 @@ const TransportationMenu = () => {
     }
   };
 
+  const handleDelete = (item) => {
+    let arr = remove(transportationListItems, item.type);
+    setTransportationListItems(arr);
+
+    // Adding data to the thing
+    let itemsRef = items;
+    let data = { label: item.type, value: item.type }
+    itemsRef.push(data);
+    setItems(itemsRef);
+    
+    //Removing it from database
+    let docData = {};
+    docData[item.type] = firebase.firestore.FieldValue.delete();
+    docRef.update(docData);
+  }
+
+  useEffect(() => {
+    docRef.get().then((doc) => {
+      if (doc.exists) {
+          const arr = doc.data();
+          const keys = Object.keys(arr);
+          
+          if(keys != 0){
+            let result = [];
+            let itemRef;
+  
+            keys.forEach((key) => {
+              const item = {
+                type: key,
+                distance: arr[key],
+              };
+              itemRef = removeItem(items, key);
+              result.push(item);
+            });
+  
+            setTransportationListItems(result);
+            setItems(itemRef);
+          }   
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+  }).catch((error) => {
+      console.log("Error getting document:", error);
+  });
+  }, [])
+
   return (
-    <View style={{ display: "flex", alignItems: "center", paddingTop: 40 }}>
+    <ScrollView style={{ height: "100%" }}>
+      <View style={{ display: "flex", flex: 1,  alignItems: "center", paddingTop: 40,  }}>
       <Text style={{ fontSize: 36, fontWeight: "bold", marginBottom: 20 }}>
         Transportation Events
       </Text>
       {transportationListItems.map((item) => (
+        <View style={{ flexDirection: "row",  alignItems: "center", paddingTop: 40,  }}>
         <Text style={{ fontSize: 20 }}>
           {item.type},{item.distance}
         </Text>
+        <TouchableOpacity style={styles.editButton} onPress={() => handleDelete(item)}>
+          <Text style={{color: "white", fontWeight: "bold"}}>Delete</Text>
+        </TouchableOpacity>
+        </View>
       ))}
       <TouchableOpacity style={styles.button} onPress={toggleOverlay}>
         <Text style={styles.buttonText}>Add Event</Text>
@@ -100,9 +215,8 @@ const TransportationMenu = () => {
           Distance
         </Text>
         <View style={{ flexDirection: "row" }}>
-
           <View style={styles.raisedMiddle}>
-            <TextInput value={distance} onChangeText={handleInputChange} keyboardType="numeric" placeholder="000" />
+            <TextInput value={distance} onChangeText={handleInputChange} keyboardType="numeric" placeholder="00" />
           </View>
     
         </View>
@@ -112,7 +226,8 @@ const TransportationMenu = () => {
           </TouchableOpacity>
         </View>
       </Overlay>
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -127,7 +242,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 40,
   },
-
+  editButton: {
+    backgroundColor: "#228B22",
+    width: 100,
+    padding: 5,
+    borderRadius: 10,
+    alignItems: "center",
+    marginLeft: 20,
+  },
   buttonText: {
     color: "white",
     fontWeight: "700",

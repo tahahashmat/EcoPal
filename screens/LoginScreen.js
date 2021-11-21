@@ -1,20 +1,20 @@
 import { useNavigation } from '@react-navigation/core'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { ImageBackground, KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { db, auth } from '../firebase'
-
+import { StateContext } from "./StateProvider";
 
 const LoginScreen = () => {
+    const { userID, setUserID } = useContext(StateContext);
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-
     const navigation = useNavigation()
 
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if(user){
-                navigation.navigate("Home")
-                var docRef = db.collection('users').doc(user.uid);
+                setUserID(user.uid);
+                navigation.navigate("Home");
             }
         })
         return unsubscribe
@@ -47,7 +47,6 @@ const LoginScreen = () => {
         behavior="padding"
         >
         
-    
         <ImageBackground
             source={require('../assets/banner.jpg')}                    
             resizeMode=""
