@@ -17,7 +17,7 @@ const Settings = ({ navigation} ) => {
     return (
         <View>
             <View style={styles.profileTextContainer}>
-                <Text> Profile </Text>
+                <Text style={styles.profileText}> Profile </Text>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
 
     },
     profileTextContainer: {
-        
         width: '50%',
-        alignItems: 'center',
-        justifyContent: 'flex-end'
+        alignItems: 'flex-end',
+        justifyContent: 'center'
     },
 
     inputContainer: { 

@@ -41,7 +41,7 @@ const transportAmount = {
   "Taxi/Uber" : 244,
   "Motorbike" : 126,
   "Bike" : 8,
-  "Walk" : 0
+  "Walk" : 0,
 }
 
 export const StateContext = createContext();

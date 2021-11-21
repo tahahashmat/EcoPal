@@ -50,7 +50,7 @@ const remove = (arr,val) => {
 }
 
 const TransportationMenu = () => {
-  const { transportationListItems, setTransportationListItems, userID } = useContext(StateContext);
+  const { transportationListItems, setTransportationListItems, userID, transportAmount } = useContext(StateContext);
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -109,6 +109,17 @@ const TransportationMenu = () => {
       setItems(itemRef);
       toggleOverlay();
 
+      // Add it to the totals
+      let result = transportAmount[item.type] * item.distance;
+      let len = transportationListItems.length;
+
+      for(let i = 0; i < len; i++){
+        let label = transportationListItems[i].type;
+        let distance = transportationListItems[i].distance;
+        result += transportAmount[label] * distance
+      }
+
+      console.log(result);
     } else if (value == null) {
       alert("Please select a transportation method");
     } else if (distance == 0) {
