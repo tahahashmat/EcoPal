@@ -1,14 +1,26 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View,Text,TouchableOpacity, StyleSheet} from 'react-native';
 import { auth } from '../firebase'
-
+import { StateContext } from "./StateProvider";
 
 
 const Settings = ({ navigation} ) => {
+    const {     setUserID,
+        setBreakfastListItems,
+        setLunchListItems,
+        setDinnerListItems,
+        setTransportationListItems } = useContext(StateContext);
 
     const handleLogout = () => {
         auth.signOut().then(() => {
             navigation.navigate("Login");
+
+            // Reset all the states
+            setUserID(null);
+            setBreakfastListItems([]);
+            setLunchListItems([]);
+            setDinnerListItems([]);
+            setTransportationListItems([]);
         }).catch(error => {
             alert(error.message)
         });

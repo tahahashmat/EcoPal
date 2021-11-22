@@ -50,7 +50,14 @@ const remove = (arr,val) => {
 }
 
 const TransportationMenu = () => {
-  const { transportationListItems, setTransportationListItems, userID, transportAmount } = useContext(StateContext);
+  const {
+    transportationListItems,
+    setTransportationListItems,
+    userID,
+    transportAmount,
+    totalTransportation,
+    setTotalTransportation,
+  } = useContext(StateContext);
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -63,7 +70,7 @@ const TransportationMenu = () => {
     { label: "Domestic Rail", value: "Domestic Rail" },
     { label: "Coach Bus", value: "Coach Bus" },
     { label: "Electric Vehicle", value: "Electric Vehicle" },
-    { label: "Taxi/Uber", value: "Taxi/Uber" },
+    { label: "Taxi or Uber", value: "Taxi or Uber" },
     { label: "Motorbike", value: "Motorbike" },
     { label: "Bike", value: "Bike" },
     { label: "Walk", value: "Walk" },
@@ -79,6 +86,11 @@ const TransportationMenu = () => {
   // Adding it to the database
   let currDate = getCurrentDate();
   let docRef = db.collection('userTransportation').doc(userID).collection('data').doc(currDate);
+  let totalRef = db
+    .collection("totals")
+    .doc(userID)
+    .collection("data")
+    .doc(currDate);
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -113,13 +125,24 @@ const TransportationMenu = () => {
       let result = transportAmount[item.type] * item.distance;
       let len = transportationListItems.length;
 
-      for(let i = 0; i < len; i++){
+      for (let i = 0; i < len; i++) {
         let label = transportationListItems[i].type;
         let distance = transportationListItems[i].distance;
-        result += transportAmount[label] * distance
+        result += transportAmount[label] * distance;
       }
+      setTotalTransportation(result);
 
-      console.log(result);
+      docData = { totalTransportation: result };
+
+      totalRef
+        .update(docData)
+        .then(() => {
+          console.log("Document successfully written!");
+        })
+        .catch((error) => {
+          totalRef.set(docData);
+          //console.error("Error writing document: ", error);
+        });
     } else if (value == null) {
       alert("Please select a transportation method");
     } else if (distance == 0) {
@@ -141,6 +164,23 @@ const TransportationMenu = () => {
     let docData = {};
     docData[item.type] = firebase.firestore.FieldValue.delete();
     docRef.update(docData);
+
+    // Removing from the thing
+    let result = totalTransportation;
+    result -= transportAmount[item.type] * item.distance;
+    setTotalTransportation(result);
+
+    docData = { totalTransportation: result };
+
+    totalRef
+      .update(docData)
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        totalRef.set(docData);
+        //console.error("Error writing document: ", error);
+      });
   }
 
   useEffect(() => {
@@ -172,6 +212,17 @@ const TransportationMenu = () => {
   }).catch((error) => {
       console.log("Error getting document:", error);
   });
+  totalRef.get().then((doc) => {
+    if (doc.exists) {
+      let arr =doc.data();
+      setTotalTransportation(arr["totalTransportation"]);
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch((error) => {
+    console.log("Error getting document:", error);
+});
   }, [])
 
   return (

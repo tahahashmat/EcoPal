@@ -14,6 +14,7 @@ const LoginScreen = () => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if(user){
                 setUserID(user.uid);
+                console.log(user.uid);
                 navigation.navigate("Home");
             }
         })

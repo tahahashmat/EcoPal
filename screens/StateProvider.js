@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect } from "react";
+import {db, firebase} from "../firebase"
 
-const carbonAmount = {
+const dietAmount = {
   "Beef (Cows Meat)": 2984,
   "Chocolate": 933,
   "Lamb": 1192,
@@ -52,21 +53,34 @@ export const StateProvider = (props) => {
   const [lunchListItems, setLunchListItems] = useState([]);
   const [dinnerListItems, setDinnerListItems] = useState([]);
   const [transportationListItems, setTransportationListItems] = useState([]);
-
+  const [totalDiet, setTotalDiet] = useState(0);
+  const [totalBreakfast, setTotalBreakfast] = useState(0);
+  const [totalLunch, setTotalLunch] = useState(0);
+  const [totalDinner, setTotalDinner] = useState(0);
+  const [totalTransportation, setTotalTransportation] = useState(0);
   // Value's that goes through to all components
   const value = {
     userID,
-    carbonAmount,
+    dietAmount,
     transportAmount,
     breakfastListItems,
     lunchListItems,
     dinnerListItems,
     transportationListItems,
+    totalTransportation,
+    totalLunch,
+    totalDinner,
+    totalBreakfast,
     setUserID,
     setBreakfastListItems,
     setLunchListItems,
     setDinnerListItems,
-    setTransportationListItems
+    setTransportationListItems,
+    setTotalTransportation,
+    setTotalDiet,
+    setTotalBreakfast,
+    setTotalLunch,
+    setTotalDinner
   };
 
   return (

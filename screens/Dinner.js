@@ -50,7 +50,7 @@ const remove = (arr,val) => {
 }
 
 const Dinner = () => {
-  const { dinnerListItems, setDinnerListItems, userID } = useContext(StateContext);
+  const { dinnerListItems, setDinnerListItems, userID, dietAmount, totalDinner ,setTotalDinner   } = useContext(StateContext);
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
@@ -86,6 +86,12 @@ const Dinner = () => {
   // Adding it to the database
   let currDate = getCurrentDate();
   let docRef = db.collection('userDiet').doc(userID).collection('dinner').doc(currDate);
+  let totalRef = db
+    .collection("totals")
+    .doc(userID)
+    .collection("data")
+    .doc(currDate);
+
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -116,6 +122,27 @@ const Dinner = () => {
       setItems(itemRef);
       toggleOverlay();
 
+      let result = dietAmount[item.type] * item.servings;
+      console.log(result);
+      let len = dinnerListItems.length;
+
+      for (let i = 0; i < len; i++) {
+        let label = dinnerListItems[i].type;
+        let servings = dinnerListItems[i].servings;
+        result += dietAmount[label] * servings;
+      }
+      setTotalDinner(result);
+
+      docData = { totalDinner : result };
+
+      totalRef
+        .update(docData)
+        .then(() => {
+          console.log("Document successfully written!");
+        })
+        .catch((error) => {
+          totalRef.set(docData);
+        });
     } else if (value == null) {
       alert("Please select an item");
     } else if (serving == 0) {
@@ -137,6 +164,23 @@ const Dinner = () => {
     let docData = {};
     docData[item.type] = firebase.firestore.FieldValue.delete();
     docRef.update(docData);
+
+    // Removing from the thing
+    let result = totalDinner ;
+    result -= dietAmount[item.type] * item.servings;
+    setTotalDinner(result);
+
+    docData = { totalDinner : result };
+
+    totalRef
+      .update(docData)
+      .then(() => {
+        console.log("Document successfully written!");
+      })
+      .catch((error) => {
+        totalRef.set(docData);
+        //console.error("Error writing document: ", error);
+      });
   }
 
   useEffect(() => {
@@ -168,6 +212,17 @@ const Dinner = () => {
   }).catch((error) => {
       console.log("Error getting document:", error);
   });
+  totalRef.get().then((doc) => {
+    if (doc.exists) {
+      let arr=doc.data();
+      setTotalDinner(arr["totalDinner"]);
+    } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+    }
+}).catch((error) => {
+    console.log("Error getting document:", error);
+});
   }, [])
 
   return (
