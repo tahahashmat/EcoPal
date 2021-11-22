@@ -22,7 +22,7 @@ const Home = ({ navigation }) => {
         name="Transportation"
         component={Transportation}
       />
-      <HomeStack.Screen options={{}} name="Diet" component={Diet} />
+      <HomeStack.Screen options={{headerShown: false}} name="Diet" component={Diet} />
     </HomeStack.Navigator>
   );
 };

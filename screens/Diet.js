@@ -13,7 +13,7 @@ const Diet = ({ navigation }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
         name="DietMenu"
         component={DietMenu}
       />

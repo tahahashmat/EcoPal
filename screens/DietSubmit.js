@@ -9,7 +9,7 @@ import {
 
 const DietSubmit = ({ navigation }) => {
   return (
-    <View>
+    <View style={{marginTop:50}}>
       <TouchableOpacity
         style={styles.container}
         onPress={() => navigation.navigate("Breakfast")}
@@ -19,8 +19,8 @@ const DietSubmit = ({ navigation }) => {
           resizeMode="cover"
           style={{
             alignItems: "center",
-            width: 310,
-            height: 180,
+            width: 250,
+            height: 150,
             margin: 66,
             justifyContent: "center",
           }}
@@ -45,8 +45,8 @@ const DietSubmit = ({ navigation }) => {
           resizeMode="cover"
           style={{
             alignItems: "center",
-            width: 310,
-            height: 180,
+            width: 250,
+            height: 150,
             margin: 66,
             justifyContent: "center",
           }}
@@ -71,8 +71,8 @@ const DietSubmit = ({ navigation }) => {
           resizeMode="cover"
           style={{
             alignItems: "center",
-            width: 310,
-            height: 180,
+            width: 250,
+            height: 150,
             margin: 66,
             justifyContent: "center",
           }}
