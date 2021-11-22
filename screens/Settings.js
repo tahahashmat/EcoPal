@@ -9,7 +9,11 @@ const Settings = ({ navigation} ) => {
         setBreakfastListItems,
         setLunchListItems,
         setDinnerListItems,
-        setTransportationListItems } = useContext(StateContext);
+        setTransportationListItems,
+        setTotalTransportation,
+    setTotalBreakfast,
+    setTotalLunch,
+    setTotalDinner } = useContext(StateContext);
 
     const handleLogout = () => {
         auth.signOut().then(() => {
@@ -21,6 +25,10 @@ const Settings = ({ navigation} ) => {
             setLunchListItems([]);
             setDinnerListItems([]);
             setTransportationListItems([]);
+            setTotalTransportation(0);
+            setTotalBreakfast(0);
+            setTotalLunch(0);
+            setTotalDinner(0); 
         }).catch(error => {
             alert(error.message)
         });

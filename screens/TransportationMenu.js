@@ -75,11 +75,11 @@ const TransportationMenu = () => {
     { label: "Bike", value: "Bike" },
     { label: "Walk", value: "Walk" },
   ]);
-  const [distance, setDistance] = useState('');
+  const [distance, setDistance] = useState();
 
   const handleInputChange = (text) => {
     if (/^\d+$/.test(text)) {
-      setDistance(text);
+      setDistance(parseInt(text));
     }
   }
 
@@ -132,15 +132,15 @@ const TransportationMenu = () => {
       }
       setTotalTransportation(result);
 
-      docData = { totalTransportation: result };
+      let tempData = { totalTransportation: result };
 
       totalRef
-        .update(docData)
+        .update(tempData)
         .then(() => {
           console.log("Document successfully written!");
         })
         .catch((error) => {
-          totalRef.set(docData);
+          totalRef.set(tempData);
           //console.error("Error writing document: ", error);
         });
     } else if (value == null) {
@@ -170,15 +170,15 @@ const TransportationMenu = () => {
     result -= transportAmount[item.type] * item.distance;
     setTotalTransportation(result);
 
-    docData = { totalTransportation: result };
+    let tempData = { totalTransportation: result };
 
     totalRef
-      .update(docData)
+      .update(tempData)
       .then(() => {
         console.log("Document successfully written!");
       })
       .catch((error) => {
-        totalRef.set(docData);
+        totalRef.set(tempData);
         //console.error("Error writing document: ", error);
       });
   }

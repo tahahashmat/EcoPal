@@ -133,15 +133,15 @@ const Lunch = () => {
         }
         setTotalLunch(result);
   
-        docData = { totalLunch: result };
+        let tempData = { totalLunch: result };
   
         totalRef
-          .update(docData)
+          .update(tempData)
           .then(() => {
             console.log("Document successfully written!");
           })
           .catch((error) => {
-            totalRef.set(docData);
+            totalRef.set(tempData);
           });   
       } else if (value == null) {
         alert("Please select an item");
@@ -170,15 +170,15 @@ const Lunch = () => {
       result -= dietAmount[item.type] * item.servings;
       setTotalLunch(result);
 
-      docData = { totalLunch: result };
+      let tempData = { totalLunch: result };
 
       totalRef
-        .update(docData)
+        .update(tempData)
         .then(() => {
           console.log("Document successfully written!");
         })
         .catch((error) => {
-          totalRef.set(docData);
+          totalRef.set(tempData);
           //console.error("Error writing document: ", error);
         });
     }

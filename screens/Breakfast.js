@@ -107,6 +107,7 @@ const Breakfast = () => {
       let docData = {};
       docData[value] = serving;
       
+      console.log(docData);
       docRef.update(docData).then(() => {
         console.log("Document successfully written!");
       })
@@ -114,7 +115,7 @@ const Breakfast = () => {
           docRef.set(docData);
           //console.error("Error writing document: ", error);
       });
-
+      
       const itemRef = removeItem(items, value);
       setBreakfastListItems([...breakfastListItems, item]);
       setServing(0);
@@ -133,16 +134,17 @@ const Breakfast = () => {
       }
       setTotalBreakfast(result);
 
-      docData = { totalBreakfast: result };
+      let tempData = { totalBreakfast: result };
 
       totalRef
-        .update(docData)
+        .update(tempData)
         .then(() => {
           console.log("Document successfully written!");
         })
         .catch((error) => {
-          totalRef.set(docData);
+          totalRef.set(tempData);
         });
+
     } else if (value == null) {
       alert("Please select an item");
     } else if (serving == 0) {
@@ -170,15 +172,15 @@ const Breakfast = () => {
     result -= dietAmount[item.type] * item.servings;
     setTotalBreakfast(result);
 
-    docData = { totalBreakfast: result };
+    let tempData = { totalBreakfast: result };
 
     totalRef
-      .update(docData)
+      .update(tempData)
       .then(() => {
         console.log("Document successfully written!");
       })
       .catch((error) => {
-        totalRef.set(docData);
+        totalRef.set(tempData);
         //console.error("Error writing document: ", error);
       });
   }
