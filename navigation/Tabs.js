@@ -36,11 +36,11 @@ const Tabs = () => {
                                 style={{
                                     width: 25,
                                     height: 25,
-                                    tintColor: focused ? '#e32f45' : '#748c94',
+                                    tintColor: focused ? "green" : "green",
                                 }}
                             />
                             <Text
-                                style={{color: focused ? '#e32f45' : '#748c94', fontSize: 10}}> HOME 
+                                style={{color: focused ? "green" : "green", fontSize: 10}}> HOME 
                             </Text>
                         </View>   
                     ),
@@ -58,11 +58,11 @@ const Tabs = () => {
                                 style={{
                                     width: 30,
                                     height: 30,
-                                    tintColor: focused ? '#e32f45' : '#748c94',
+                                    tintColor: focused ? "green" : "green",
                                 }}
                             />
                             <Text
-                                style={{color: focused ? '#e32f45' : '#748c94', fontSize: 10}}> DEVICES 
+                                style={{color: focused ? "green" : "green", fontSize: 10}}> DEVICES 
                             </Text>
                         </View>   
                     ),
@@ -81,11 +81,11 @@ const Tabs = () => {
                                 style={{
                                     width: 30,
                                     height: 30,
-                                    tintColor: focused ? '#e32f45' : '#748c94',
+                                    tintColor: focused ? '#49dd08' : '#49dd08',
                                 }}
                             />
                             <Text
-                                style={{color: focused ? '#e32f45' : '#748c94', fontSize: 10}}> SUGGESTIONS 
+                                style={{color: focused ? "green" : "green", fontSize: 10}}> SUGGESTIONS 
                             </Text>
                         </View>   
                     ),
@@ -103,11 +103,11 @@ const Tabs = () => {
                                 style={{
                                     width: 25,
                                     height: 25,
-                                    tintColor: focused ? '#e32f45' : '#748c94',
+                                    tintColor: focused ? '#49dd08' : '#49dd08',
                                 }}
                             />
                             <Text
-                                style={{color: focused ? '#e32f45' : '#748c94', fontSize: 10}}> SETTINGS 
+                                style={{color: focused ? '#49dd08' : '#49dd08', fontSize: 10}}> SETTINGS 
                             </Text>
                         </View>   
                     ),
@@ -120,7 +120,7 @@ const Tabs = () => {
 
 const styles = StyleSheet.create({
     shadow: {
-        shadowColor: '#7F5DF0',
+        shadowColor: '#49dd08',
         shadowOffset: {
             width: 0,
             height: 10,

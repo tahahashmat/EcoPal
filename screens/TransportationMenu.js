@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-
-import { View, ScrollView, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
-import { Overlay } from "react-native-elements";
+import { View, ScrollView, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from "react-native";
+import { Overlay, Icon } from "react-native-elements";
 import DropDownPicker from "react-native-dropdown-picker";
+import { Table, Row, Rows } from 'react-native-table-component';
 import { StateContext } from "./StateProvider";
 import {db, firebase} from "../firebase"
 
@@ -227,22 +227,41 @@ const TransportationMenu = () => {
 
   return (
     <ScrollView style={{ height: "100%" }}>
-      <View style={{ display: "flex", flex: 1,  alignItems: "center", paddingTop: 40,  }}>
-      <Text style={{ fontSize: 36, fontWeight: "bold", marginBottom: 20 }}>
-        Transportation Events
+      <View style={{ display: "flex", flex: 1,  alignItems: "center", paddingTop: 40 }}>
+      
+      {/* Main Heading */}
+
+      <Text style={{ fontSize: 30, fontWeight: "bold", marginBottom: 20, marginTop: 30 }}>
+        Transportation List
       </Text>
-      {transportationListItems.map((item) => (
-        <View style={{ flexDirection: "row",  alignItems: "center", paddingTop: 40,  }}>
-        <Text style={{ fontSize: 20 }}>
-          {item.type},{item.distance}
-        </Text>
-        <TouchableOpacity style={styles.editButton} onPress={() => handleDelete(item)}>
-          <Text style={{color: "white", fontWeight: "bold"}}>Delete</Text>
+
+      {/* Adding All the Items in a drop down */}
+
+      <View style={styles.wrapper}>
+            <Text style={styles.row1}> Transport Method </Text>
+            <Text style={styles.row1}> Distance (km/h) </Text>   
+      </View>
+
+    {transportationListItems.map((item) => (
+     
+     <View style={styles.tableList} > 
+       
+          <View style={styles.wrapper}>
+            <Text style={styles.row2}> {item.type} </Text>
+            <Text style={styles.row3}> {item.distance} </Text>            
+        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item)}>
+          <Icon name= "delete" color= "white"/>
         </TouchableOpacity>
-        </View>
+
+          </View>
+
+        
+      </View>
+
       ))}
-      <TouchableOpacity style={styles.button} onPress={toggleOverlay}>
-        <Text style={styles.buttonText}>Add Event</Text>
+
+      <TouchableOpacity style={styles.floatingActionButton} onPress={toggleOverlay}>
+        <Icon name='add' color="white"/>
       </TouchableOpacity>
       <Overlay
         overlayStyle={{ borderRadius: 10, margin: 10 }}
@@ -304,13 +323,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 40,
   },
-  editButton: {
+  deleteButton: {
     backgroundColor: "#228B22",
-    width: 100,
-    padding: 5,
-    borderRadius: 10,
-    alignItems: "center",
-    marginLeft: 20,
+    width: 35,
+    height: 35,
+    padding: 2,
+    borderRadius: 50,
+    marginLeft: 10,
+    marginRight: 10,
+    justifyContent:'center',
+    alignItems: 'center',
   },
   buttonText: {
     color: "white",
@@ -347,4 +369,59 @@ const styles = StyleSheet.create({
     flex: 4,
     marginRight: 10,
   },
+  tableList:{
+    flex:1,
+    width: '100%',
+  },
+
+  wrapper:{
+    flexDirection:'row',
+    flexWrap:'wrap',
+    borderBottomWidth: 1,    
+  },
+
+  row1:{
+    width:'100%',
+    flex:1,
+    fontSize: 15,
+    paddingHorizontal: 2,
+    paddingVertical: 10,
+    alignItems: "center",
+    fontWeight: "bold"
+  },
+  
+  row2:{
+    width:'100%',
+    flex:1,
+    fontSize: 15,
+    paddingHorizontal: 2,
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  
+  row3:{
+    width:'100%',
+    flex:1,
+    fontSize: 15,
+    paddingHorizontal: 2,
+    paddingVertical: 10,
+    marginLeft: 70,
+    alignItems: "center",
+  },
+  
+  
+  floatingActionButton: {
+    position:'absolute',
+    backgroundColor: 'green',
+    width: 55,
+    height: 55,
+    top: 680,
+    left: 300,
+    zIndex:5,
+    borderRadius:100,
+    justifyContent:'center',
+    alignItems: 'center',
+  },
+
+
 });

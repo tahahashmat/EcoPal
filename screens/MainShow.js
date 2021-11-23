@@ -95,7 +95,7 @@ const MainShow = ({ navigation }) => {
             width: 350,
             paddingVertical: SIZES.padding,
             paddingHorizontal: SIZES.padding,
-            marginLeft: 30,
+            marginLeft: 20,
             marginRight: SIZES.padding,
             borderRadius: 10,
             backgroundColor: COLORS.white,
@@ -130,7 +130,7 @@ const MainShow = ({ navigation }) => {
             width: 350,
             paddingVertical: SIZES.padding,
             paddingHorizontal: SIZES.padding,
-            marginLeft: 30,
+            marginLeft: 20,
             marginRight: SIZES.padding,
             borderRadius: 10,
             backgroundColor: COLORS.white,
@@ -166,7 +166,7 @@ const MainShow = ({ navigation }) => {
             width: 350,
             paddingVertical: SIZES.padding,
             paddingHorizontal: SIZES.padding,
-            marginLeft: 30,
+            marginLeft: 20,
             marginRight: SIZES.padding,
             borderRadius: 10,
             backgroundColor: COLORS.white,
@@ -204,7 +204,7 @@ const MainShow = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: "#7F5DF0",
+    shadowColor: "green",
     shadowOffset: {
       width: 0,
       height: 10,

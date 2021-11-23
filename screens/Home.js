@@ -18,7 +18,7 @@ const Home = ({ navigation }) => {
       />
       <HomeStack.Screen options={{}} name="Household" component={Household} />
       <HomeStack.Screen
-        options={{}}
+        options={{headerShown: false}}
         name="Transportation"
         component={Transportation}
       />
