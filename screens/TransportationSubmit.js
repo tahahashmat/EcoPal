@@ -1,36 +1,59 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useEffect, useContext, useState } from "react";
 import {VictoryChart, VictoryGroup, VictoryBar, VictoryLegend} from 'victory-native';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions} from "react-native";
-import {Icon} from 'react-native-elements'
+import {Icon} from 'react-native-elements';
+import {db, firebase} from "../firebase";
+import { StateContext } from "./StateProvider";
+
+
 
 const TransportationSubmit = ({ navigation }) => {
+  const {userID} = useContext(StateContext);
+  const [graphData, setGraphData] = useState();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    var docRef = db.collection("totals").doc(userID).collection("data");
+
+    docRef.get().then((querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          let tempData = doc.data();
+          let temp = {x: doc.id, y: tempData["totalTransportation"]}
+          data.push(temp);
+      });
+      setGraphData(data);
+      setShow(true);
+  });
+  }, [])
   return (
     <>
-    
-    <View style={{ flex: 1, marginTop: 50}}>
+    <View style={{ flex: 1,
+    marginTop: 50,
+    alignItems: "center",
+    }}>
     
     <Text style={styles.title}>Past Week</Text>
     <View>
-      <VictoryChart>
-        <VictoryGroup offset={20}>
-          <VictoryBar data={dailydata.actual}
-            data={dailydata.actual}
+      {show ? ( <VictoryChart width={350}  domainPadding={{ x: 50 }}>
+        <VictoryGroup offset={0} >
+          <VictoryBar
+            barWidth={20}
+            data={graphData}
             style={{
               data: {
                 fill: 'green',
               },
             }}
+            barRatio={0.8}
+            animate={{
+              duration: 500,
+            }}
           />
-          <VictoryBar 
-          data={dailydata.planned}
-          style={{
-            data: {
-              fill: 'orange',
-            },
-          }} />
         </VictoryGroup>
         <VictoryLegend
-          x={Dimensions.get('screen').width / 2 - 100}
+          x={100}
           orientation="horizontal"
           alignItems='center'
           gutter={20}
@@ -41,64 +64,10 @@ const TransportationSubmit = ({ navigation }) => {
                 fill: 'green',
               },
             },
-            {
-              name: 'Target',
-              symbol: {
-                fill: 'orange',
-              },
-            },
           ]}
        />
-      </VictoryChart>
-    </View>
-
-
-{/*
-  <Text style={styles.title}>Past 6 Months</Text>
-    <View>
-      <VictoryChart>
-        <VictoryGroup offset={20}>
-          <VictoryBar data={monthlydata.actual}
-            data={monthlydata.actual}
-            style={{
-              data: {
-                fill: 'green',
-              },
-            }}
-          />
-          <VictoryBar 
-          data={monthlydata.planned}
-          style={{
-            data: {
-              fill: 'orange',
-            },
-          }} />
-        </VictoryGroup>
-        <VictoryLegend
-          x={Dimensions.get('screen').width / 2 - 100}
-          orientation="horizontal"
-          gutter={20}
-          data={[
-            {
-              name: 'CO2 Consumption',
-              symbol: {
-                fill: 'green'
-              },
-            },
-            {
-              name: 'Target',
-              symbol: {
-                fill: 'orange'
-            },
-            },
-          ]}
-      
-       />
-      </VictoryChart>
-    </View>
-
-        */}
-        
+      </VictoryChart>) : ( null)}
+        </View>
   </View>
 
   
@@ -112,27 +81,6 @@ const TransportationSubmit = ({ navigation }) => {
   
   </>
   );
-};
-
-const dailydata = {
-  planned: [null, 
-    {x: 'Mon', y: 30},
-    {x: 'Tues', y: 30},
-    {x: 'Wed', y: 30},
-    {x: 'Thurs', y: 30},
-    {x: 'Fri', y: 30},
-    {x: 'Sat', y: 30},
-    {x: 'Sun', y: 30},
-  ],
-  actual: [
-    {x: 'Mon', y:50},
-    {x: 'Tues', y:80},
-    {x: 'Wed', y:45},
-    {x: 'Thurs', y:30},
-    {x: 'Fri', y:55},
-    {x: 'Sat', y:55},
-    {x: 'Sun', y:55},    
-  ],
 };
 
 export default TransportationSubmit;

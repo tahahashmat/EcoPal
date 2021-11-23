@@ -39,7 +39,7 @@ const transportAmount = {
   "Domestic Rail": 46,
   "Coach Bus": 29,
   "Electric Vehicle": 80,
-  "Taxi/Uber" : 244,
+  "Taxi or Uber" : 244,
   "Motorbike" : 126,
   "Bike" : 8,
   "Walk" : 0,

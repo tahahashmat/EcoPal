@@ -1,85 +1,122 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, useEffect, useContext, useState } from "react";
 import {VictoryChart, VictoryGroup, VictoryBar, VictoryLegend} from 'victory-native';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions} from "react-native";
-import {Icon} from 'react-native-elements'
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Button} from "react-native";
+import {Icon} from 'react-native-elements';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {db, firebase} from "../firebase";
+import { StateContext } from "./StateProvider";
 
+// Helper function to get the current date
+const getCurrentDate = () => {
 
-const dailydata = {
-  planned: [null, 
-    {x: 'Mon', y: 30},
-    {x: 'Tues', y: 30},
-    {x: 'Wed', y: 30},
-    {x: 'Thurs', y: 30},
-    {x: 'Fri', y: 30},
-    {x: 'Sat', y: 30},
-    {x: 'Sun', y: 30},
-  ],
-  actual: [
-    {x: 'Mon', y:50},
-    {x: 'Tues', y:80},
-    {x: 'Wed', y:45},
-    {x: 'Thurs', y:30},
-    {x: 'Fri', y:55},
-    {x: 'Sat', y:55},
-    {x: 'Sun', y:55},    
-  ],
-};
+  var date = new Date().getDate();
+  var month = new Date().getMonth() + 1;
+  var year = new Date().getFullYear();
 
-{/*
-const monthlydata = {
-  planned: [null, 
-    {x: 'Jun', y: 30},
-    {x: 'Jul', y: 30},
-    {x: 'Aug', y: 30},
-    {x: 'Sep', y: 30},
-    {x: 'Oct', y: 30},
-    {x: 'Nov', y: 30},
-
-  ],
-  actual: [
-    {x: 'Jun', y:38},
-    {x: 'Jul', y:52},
-    {x: 'Aug', y:32},
-    {x: 'Sep', y:71},
-    {x: 'Oct', y:23},
-    {x: 'Nov', y:34},
-  ],
-};
-
-*/}
+  //Alert.alert(date + '-' + month + '-' + year);
+  // You can turn it in to your desired format
+  return date + '-' + month + '-' + year;//format: dd-mm-yyyy;
+}
 
 const DietMenu = ({ navigation }) => {
-  return (
+  const {userID} = useContext(StateContext);
+  const [graphData, setGraphData] = useState();
+  const [show, setShow] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [currDate, setCurrDate] = useState(new Date());
+  const [dateString, setDateString] = useState(new Date().toString());
+  const [items, setItems] = useState([]);
 
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let dateT = date.getDate();
+    let result = dateT + '-' + month + '-' + year;
+    setDateString(result);
+
+    var docRef = db.collection("totals").doc(userID).collection("data").doc(result);
+    docRef.get().then((doc) => {
+      if (doc.exists) {
+        let arr=doc.data();
+        setItems(arr);
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+  }).catch((error) => {
+      console.log("Error getting document:", error);
+  });
+
+    setCurrDate(date);
+    hideDatePicker();
+  };
+
+  useEffect(() => {
+    var docRef = db.collection("totals").doc(userID).collection("data");
+
+    docRef.get().then((querySnapshot) => {
+      let data = [];
+      querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          let tempData = doc.data();
+          let temp = {x: doc.id, y: (tempData["totalBreakfast"] ? tempData["totalBreakfast"]: 0 ) + (tempData["totalLunch"] ? tempData["totalLunch"]: 0 ) + (tempData["totalDinner"] ? tempData["totalDinner"]: 0 )}
+          data.push(temp);
+      });
+      setGraphData(data);
+      setShow(true);
+    });
+
+    let result = getCurrentDate();
+    docRef.doc(result).get().then((doc) => {
+      if (doc.exists) {
+        let arr=doc.data();
+        setItems(arr);
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+  }).catch((error) => {
+      console.log("Error getting document:", error);
+  });
+
+  }, [])
+  return (
     <>
-    
-    <View style={{ flex: 1, marginTop: 50}}>
-    
+    <View style={{ flex: 1,
+    marginTop: 50,
+    alignItems: "center",
+    }}>
     <Text style={styles.title}>Past Week</Text>
     <View>
-      <VictoryChart>
-        <VictoryGroup offset={20}>
-          <VictoryBar data={dailydata.actual}
-            data={dailydata.actual}
+      {show ? ( <VictoryChart width={350}  domainPadding={{ x: 50 }}>
+        <VictoryGroup offset={0} >
+          <VictoryBar
+            barWidth={20}
+            data={graphData}
             style={{
               data: {
                 fill: 'green',
               },
             }}
+            barRatio={0.8}
+            animate={{
+              duration: 500,
+            }}
           />
-          <VictoryBar 
-          data={dailydata.planned}
-          style={{
-            data: {
-              fill: 'orange',
-            },
-          }} />
         </VictoryGroup>
         <VictoryLegend
-          x={Dimensions.get('screen').width / 2 - 100}
+          x={100}
           orientation="horizontal"
-          alignItems='center'
-          gutter={20}
+          alignItems = "center"
+          gutter={10}
           data={[
             {
               name: 'CO2 Consumption',
@@ -87,77 +124,25 @@ const DietMenu = ({ navigation }) => {
                 fill: 'green',
               },
             },
-            {
-              name: 'Target',
-              symbol: {
-                fill: 'orange',
-              },
-            },
           ]}
        />
-      </VictoryChart>
-    </View>
-
-
-{/*
-  <Text style={styles.title}>Past 6 Months</Text>
-    <View>
-      <VictoryChart>
-        <VictoryGroup offset={20}>
-          <VictoryBar data={monthlydata.actual}
-            data={monthlydata.actual}
-            style={{
-              data: {
-                fill: 'green',
-              },
-            }}
-          />
-          <VictoryBar 
-          data={monthlydata.planned}
-          style={{
-            data: {
-              fill: 'orange',
-            },
-          }} />
-        </VictoryGroup>
-        <VictoryLegend
-          x={Dimensions.get('screen').width / 2 - 100}
-          orientation="horizontal"
-          gutter={20}
-          data={[
-            {
-              name: 'CO2 Consumption',
-              symbol: {
-                fill: 'green'
-              },
-            },
-            {
-              name: 'Target',
-              symbol: {
-                fill: 'orange'
-            },
-            },
-          ]}
-      
-       />
-      </VictoryChart>
-    </View>
-
-        */}
-        
-  </View>
-
-  
-  <TouchableOpacity style={styles.floatingActionButton} onPress={() => navigation.navigate("DietSubmit")}>
-     
-    <Icon name='add' color="white"/>
-    
+      </VictoryChart>) : ( null)}
+        </View>
+        <TouchableOpacity onPress={showDatePicker}>
+    <Text style={{fontWeight: "bold", fontSize: "20"}}>{dateString}</Text>
   </TouchableOpacity>
-
-
-  
+  </View>
+  <DateTimePickerModal
+    isVisible={isDatePickerVisible}
+    mode="date"
+    date={currDate}
+    onConfirm={handleConfirm}
+    onCancel={hideDatePicker}
+  />
+  <TouchableOpacity style={styles.floatingActionButton} onPress={() => navigation.navigate("DietSubmit")}>
+    <Icon name='add' color="white"/>
+  </TouchableOpacity>
   </>
-  
   );
 };
 
