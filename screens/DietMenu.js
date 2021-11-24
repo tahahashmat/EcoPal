@@ -3,6 +3,7 @@ import {VictoryChart, VictoryGroup, VictoryBar, VictoryLegend} from 'victory-nat
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Button} from "react-native";
 import {Icon} from 'react-native-elements';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Table, Row, Rows } from 'react-native-table-component';
 import {db, firebase} from "../firebase";
 import { StateContext } from "./StateProvider";
 
@@ -24,7 +25,7 @@ const DietMenu = ({ navigation }) => {
   const [show, setShow] = useState(false);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [currDate, setCurrDate] = useState(new Date());
-  const [dateString, setDateString] = useState(new Date().toString());
+  const [dateString, setDateString] = useState(getCurrentDate());
   const [items, setItems] = useState([]);
 
   const showDatePicker = () => {
@@ -46,10 +47,29 @@ const DietMenu = ({ navigation }) => {
     docRef.get().then((doc) => {
       if (doc.exists) {
         let arr=doc.data();
-        setItems(arr);
+        let test = [
+          ["Breakfast", "-"],
+          ["Lunch", "-"],
+          ["Dinner", "-"]
+        ];
+        var result = Object.keys(arr).map((key) => {
+          if(key.substring(5) === "Breakfast"){
+            test[0][1] = arr[key] == 0 ? "-": arr[key];
+          } else if(key.substring(5) === "Lunch"){
+            test[1][1] = arr[key] == 0 ? "-": arr[key];
+          } else if(key.substring(5) === "Dinner"){
+            test[2][1] = arr[key] == 0 ? "-": arr[key];
+          }
+        });
+        setItems(test);
       } else {
+        let test = [
+          ["Breakfast", "-"],
+          ["Lunch", "-"],
+          ["Dinner", "-"]
+        ];
           // doc.data() will be undefined in this case
-          console.log("No such document!");
+          setItems(test);
       }
   }).catch((error) => {
       console.log("Error getting document:", error);
@@ -78,10 +98,29 @@ const DietMenu = ({ navigation }) => {
     docRef.doc(result).get().then((doc) => {
       if (doc.exists) {
         let arr=doc.data();
-        setItems(arr);
+        let test = [
+          ["Breakfast", "-"],
+          ["Lunch", "-"],
+          ["Dinner", "-"]
+        ];
+        var result = Object.keys(arr).map((key) => {
+          if(key.substring(5) === "Breakfast"){
+            test[0][1] = arr[key] == 0 ? "-": arr[key];
+          } else if(key.substring(5) === "Lunch"){
+            test[1][1] = arr[key] == 0 ? "-": arr[key];
+          } else if(key.substring(5) === "Dinner"){
+            test[2][1] = arr[key] == 0 ? "-": arr[key];
+          }
+        });
+        setItems(test);
       } else {
+        let test = [
+          ["Breakfast", "-"],
+          ["Lunch", "-"],
+          ["Dinner", "-"]
+        ];
           // doc.data() will be undefined in this case
-          console.log("No such document!");
+          setItems(test);
       }
   }).catch((error) => {
       console.log("Error getting document:", error);
@@ -95,7 +134,7 @@ const DietMenu = ({ navigation }) => {
     alignItems: "center",
     }}>
     <Text style={styles.title}>Past Week</Text>
-    <View>
+    <View style={{marginBottom:30}}>
       {show ? ( <VictoryChart width={350}  domainPadding={{ x: 50 }}>
         <VictoryGroup offset={0} >
           <VictoryBar
@@ -128,9 +167,20 @@ const DietMenu = ({ navigation }) => {
        />
       </VictoryChart>) : ( null)}
         </View>
-        <TouchableOpacity onPress={showDatePicker}>
-    <Text style={{fontWeight: "bold", fontSize: "20"}}>{dateString}</Text>
+  <TouchableOpacity onPress={showDatePicker} style={{color: "white",marginBottom: 20, backgroundColor: "green", padding: 10, borderRadius: 10}}>
+    <Text style={{fontWeight: "bold", fontSize: "20", color: "white"}}>{dateString}</Text>
   </TouchableOpacity>
+  <View style={styles.wrapper}>
+            <Text style={styles.row1}> Diet </Text>
+            <Text style={styles.row1}> CO2 consumed </Text>   
+  </View>
+  {items.map((item) => (
+    item[0] != "Transportation" ?  
+    (<View style={styles.wrapper}>
+      <Text style={styles.row2}> {item[0]} </Text>
+      <Text style={styles.row3}> {item[1]} </Text>            
+    </View>) : (null)
+  ))}
   </View>
   <DateTimePickerModal
     isVisible={isDatePickerVisible}
@@ -176,10 +226,50 @@ const styles = StyleSheet.create({
     width: 55,
     height: 55,
     position: 'absolute',
-    bottom: 45,
+    bottom: 25,
     right: 10,
     borderRadius:100,
     justifyContent:'center',
     alignItems: 'center',
+  },
+  tableList:{
+    flex:1,
+    width: '100%',
+    justifyContent: 'center',
+  },
+
+  wrapper:{
+    flexDirection:'row',
+    flexWrap:'wrap',
+    borderBottomWidth: 1,  
+  },
+
+  row1:{
+    width:'100%',
+    flex:1,
+    fontSize: 15,
+    paddingHorizontal: 2,
+    paddingVertical: 10,
+    alignItems: "center",
+    fontWeight: "bold"
+  },
+  
+  row2:{
+    width:'100%',
+    flex:1,
+    fontSize: 15,
+    paddingHorizontal: 2,
+    paddingVertical: 10,
+    alignItems: "center",
+  },
+  
+  row3:{
+    width:'100%',
+    flex:1,
+    fontSize: 15,
+    paddingHorizontal: 2,
+    paddingVertical: 10,
+    marginLeft: 70,
+    alignItems: "center",
   },
 });
