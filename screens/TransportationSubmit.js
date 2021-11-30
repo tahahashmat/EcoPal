@@ -114,7 +114,7 @@ const TransportationSubmit = ({ navigation }) => {
     
     <Text style={styles.title}>Past Week</Text>
     <View>
-      {show ? ( <VictoryChart width={350}  domainPadding={{ x: 50 }}>
+      {show ? ( <VictoryChart width={350}  domainPadding={{ x: 20 }}>
         <VictoryGroup offset={0} >
           <VictoryBar
             barWidth={20}
@@ -137,7 +137,7 @@ const TransportationSubmit = ({ navigation }) => {
           gutter={20}
           data={[
             {
-              name: 'CO2 Consumption',
+              name: "CO2 Emission / g",
               symbol: {
                 fill: 'green',
               },
@@ -151,7 +151,7 @@ const TransportationSubmit = ({ navigation }) => {
   </TouchableOpacity>
   <View style={styles.wrapper}>
             <Text style={styles.row1}> Transport </Text>
-            <Text style={styles.row1}> CO2 consumed </Text>   
+            <Text style={styles.row1}> CO2 Emission / g </Text>   
   </View> 
   <View style={styles.wrapper}>
     <Text style={styles.row2}> {items[0]} </Text>

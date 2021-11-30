@@ -36,9 +36,7 @@ const Settings = ({ navigation} ) => {
 
     return (
         <View>
-            <View style={styles.profileTextContainer}>
-                <Text style={styles.profileText}> Profile </Text>
-            </View>
+
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={handleLogout}
@@ -90,33 +88,42 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
+        borderColor: '#228B22',
+
     },
 
     button: {
-        backgroundColor: '#228B22',
-        width: '100%',
+        backgroundColor: 'white',
+        width: '75%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
+        marginTop: 550,
+        borderColor: '#228B22',
+        borderWidth: 2.5,
+
     },
 
     buttonText: {
-        color: 'white',
+        color: '#228B22',
         fontWeight: '700',
         fontSize: 16,
     },
 
     buttonOutline: {
-        backgroundColor: 'white',
+        backgroundColor: '#228B22',
         marginTop: 5,
         borderColor: '#228B22',
-        borderWidth: 2,
+        borderWidth: 75,
+      
     },
 
     buttonOutlineText: {
         color: '#228B22',
         fontWeight: '700',
         fontSize: 16,
+        borderColor: '#228B22',
+
     },
  
 })

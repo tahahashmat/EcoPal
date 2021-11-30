@@ -6,6 +6,7 @@ import Settings from "./Settings";
 import Suggestions from "./Suggestions";
 import Transportation from "./Transportation";  
 import Home from "./Home";
+import Devices from "./Devices";
 
 
 const Tab = createBottomTabNavigator();
@@ -53,7 +54,7 @@ const HomeScreen = () => {
             />
             <Tab.Screen 
                 name="Connected Devices"
-                component={Transportation}
+                component={Devices}
                 options={{
                     tabBarIcon: ({focused}) => (
                         <View style = {{alignItems: 'center', justifyContent: 'center', top: 10}}>

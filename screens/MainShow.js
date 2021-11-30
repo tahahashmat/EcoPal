@@ -35,48 +35,18 @@ const MainShow = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
+        <Image source={require("../assets/EcoHub.png")}
+          style = {{
+            resizeMode: "cover",
+            width: 300,
+            height: 250,
+            marginTop: 10 
           }}
         >
-          <Text
-            style={{
-              color: COLORS.white,
-              ...FONTS.h3,
-              fontWeight: "bold",
-              alignContent: "center",
-              marginTop: 75,
-              fontSize: 22.5,
-            }}
-          >
-            Estimated Carbon Reduction
-          </Text>
-          <Text
-            style={{
-              marginTop: SIZES.base,
-              color: COLORS.white,
-              ...FONTS.h1,
-              fontWeight: "bold",
-              alignContent: "center",
-              fontSize: 22.5,
-            }}
-          >
-            21.4%
-          </Text>
-          <Text
-            style={{
-              color: COLORS.white,
-              ...FONTS.body5,
-              fontWeight: "bold",
-              alignContent: "center",
-              fontSize: 18.5,
-            }}
-          >
-            Per Annum
-          </Text>
-        </View>
+
+        </Image>
+
+  
       </ImageBackground>
 
       <View

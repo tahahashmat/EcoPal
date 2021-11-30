@@ -185,7 +185,8 @@ const TransportationMenu = () => {
   }
 
   useEffect(() => {
-    docRef.get().then((doc) => {
+    docRef.get()
+    .then((doc) => {
       if (doc.exists) {
           const arr = doc.data();
           const keys = Object.keys(arr);
@@ -213,7 +214,8 @@ const TransportationMenu = () => {
   }).catch((error) => {
       console.log("Error getting document:", error);
   });
-  totalRef.get().then((doc) => {
+  totalRef.get()
+  .then((doc) => {
     if (doc.exists) {
       let arr =doc.data();
       setTotalTransportation(arr["totalTransportation"]);
