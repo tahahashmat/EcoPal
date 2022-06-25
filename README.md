@@ -1,5 +1,9 @@
 # EcoHub
 
+Topics: Mobile App Development, Machine Learning, Internet of Things, Global Warming
+
+Tech Used: React Native, Firebase, Django, Raspberry Pi
+
 LINK TO VERSION II ----> https://github.com/a-c-page/EcoPal
 
 LINK TO OPEN APPLICATION ON EXPO GO ----> exp://exp.host/@acpage/ecohub
